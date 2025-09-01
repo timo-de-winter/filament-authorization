@@ -13,6 +13,7 @@ class FilamentAuthorizationServiceProvider extends PackageServiceProvider
             ->name('filament-authorization')
             ->hasConfigFile()
             ->hasViews()
+            ->hasTranslations()
             ->hasMigration('create_filament_authorization_table');
     }
 }
