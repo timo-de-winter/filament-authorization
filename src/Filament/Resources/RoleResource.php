@@ -13,6 +13,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use TimoDeWinter\FilamentAuthorization\Filament\Forms\Components\PermissionsSelect;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource\Pages;
 use TimoDeWinter\FilamentModifiablePlugins\Concerns\CanBeModified;
 use TimoDeWinter\FilamentModifiablePlugins\CustomizableTable;
@@ -67,9 +68,10 @@ class RoleResource extends Resource
                                        ->mapWithKeys(fn (string $key) => [$key => $key])
                                        ->toArray();
                                 }),
-
-                            // todo: add permissions
                         ]),
+
+                    PermissionsSelect::make('permissions')
+                        ->columnSpanFull(),
                 ]);
         });
     }
