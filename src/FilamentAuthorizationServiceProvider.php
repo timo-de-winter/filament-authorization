@@ -16,4 +16,14 @@ class FilamentAuthorizationServiceProvider extends PackageServiceProvider
             ->hasTranslations()
             ->hasMigration('create_filament_authorization_table');
     }
+
+    public function packageBooted(): void
+    {
+        \TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization::registerPermission([
+            'view' => __('filament-authorization::labels.view'),
+            'update' => __('filament-authorization::labels.update'),
+            'create' => __('filament-authorization::labels.create'),
+            'delete' => __('filament-authorization::labels.delete'),
+        ], 'roles');
+    }
 }
