@@ -2,9 +2,12 @@
 
 namespace TimoDeWinter\FilamentAuthorization;
 
+use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Spatie\Permission\Models\Role;
 use TimoDeWinter\FilamentAuthorization\Console\Commands\SyncPermissionsCommand;
+use TimoDeWinter\FilamentAuthorization\Policies\RolePolicy;
 
 class FilamentAuthorizationServiceProvider extends PackageServiceProvider
 {
@@ -27,5 +30,7 @@ class FilamentAuthorizationServiceProvider extends PackageServiceProvider
             'create' => __('filament-authorization::labels.create'),
             'delete' => __('filament-authorization::labels.delete'),
         ], 'roles');
+
+        Gate::policy(Role::class, RolePolicy::class);
     }
 }
