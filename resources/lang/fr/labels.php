@@ -5,4 +5,8 @@ return [
     'guard_name' => 'Garde',
     'role' => 'Rôle',
     'roles' => 'Rôles',
+    'view' => 'Voir',
+    'update' => 'Mettre à jour',
+    'create' => 'Créer',
+    'delete' => 'Supprimer',
 ];
