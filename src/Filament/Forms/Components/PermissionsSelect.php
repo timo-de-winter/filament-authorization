@@ -47,6 +47,7 @@ class PermissionsSelect
                 'xs' => 1,
                 'md' => 2,
                 'lg' => 3,
+                'xl' => 4,
             ])
             ->schema(
                 collect(FilamentAuthorization::getPrefixGroups($tab))
@@ -55,9 +56,9 @@ class PermissionsSelect
                             ->columnSpan(1)
                             ->schema(function () use ($name, $tab, $group) {
                                 return collect(FilamentAuthorization::getPermissions($tab, $group))
-                                    ->map(function (string $permission, int|string $key) use ($name, $group) {
-                                        return Checkbox::make(implode('.', [$name, $group, $permission]))
-                                            ->label(is_string($key) ? $key : ucfirst($permission));
+                                    ->map(function (string|int $permission, int|string $key) use ($name, $group) {
+                                        return Checkbox::make(implode('.', [$name, $group, $key]))
+                                            ->label(is_string($permission) ? $permission : ucfirst($key));
                                     })
                                     ->toArray();
                             });

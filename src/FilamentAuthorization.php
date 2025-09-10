@@ -32,4 +32,24 @@ class FilamentAuthorization
     {
         return $this->permissions[$tab][$prefix] ?? [];
     }
+
+    public function getAllPermissions(): array
+    {
+        return $this->permissions;
+    }
+
+    public function formatPermissionsForDatabase(array $permissions, bool $filterOnEnabled = true): array
+    {
+        $formattedPermissions = [];
+
+        foreach ($permissions as $group => $permissionList) {
+            foreach ($permissionList as $permission => $enabled) {
+                if ($enabled || !$filterOnEnabled) {
+                    $formattedPermissions[] = $group . '::' . $permission;
+                }
+            }
+        }
+
+        return $formattedPermissions;
+    }
 }

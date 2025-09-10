@@ -57,7 +57,8 @@ class RoleResource extends Resource
                             TextInput::make('name')
                                 ->label(__('filament-authorization::labels.name'))
                                 ->maxLength(255)
-                                ->required(),
+                                ->required()
+                                ->unique(config('permission.table_names.roles'), 'name'),
 
                             Select::make('guard_name')
                                 ->label(__('filament-authorization::labels.guard_name'))
