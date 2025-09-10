@@ -53,6 +53,12 @@ $filamentAuthorization = new TimoDeWinter\FilamentAuthorization();
 echo $filamentAuthorization->echoPhrase('Hello, TimoDeWinter!');
 ```
 
+### Synchronisation command
+The package comes with a command to synchronize all permissions to the database. In most use cases it would be smart to add this command to your deployment script:
+```bash
+php artisan authorization:sync-permissions
+```
+
 ## Testing
 ```bash
 composer test
