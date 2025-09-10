@@ -4,6 +4,7 @@ namespace TimoDeWinter\FilamentAuthorization;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use TimoDeWinter\FilamentAuthorization\Console\Commands\SyncPermissionsCommand;
 
 class FilamentAuthorizationServiceProvider extends PackageServiceProvider
 {
@@ -14,6 +15,7 @@ class FilamentAuthorizationServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasTranslations()
+            ->hasCommand(SyncPermissionsCommand::class)
             ->hasMigration('create_filament_authorization_table');
     }
 
