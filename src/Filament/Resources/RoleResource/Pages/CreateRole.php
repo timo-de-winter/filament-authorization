@@ -22,7 +22,7 @@ class CreateRole extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        if (!config('filament-authorization.guard.modifiable')) {
+        if (! config('filament-authorization.guard.modifiable')) {
             $data['guard_name'] = config('filament-authorization.guard.default');
         }
 

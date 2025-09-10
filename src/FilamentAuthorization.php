@@ -45,8 +45,8 @@ class FilamentAuthorization
 
         foreach ($permissions as $group => $permissionList) {
             foreach ($permissionList as $permission => $enabled) {
-                if ($enabled || !$filterOnEnabled) {
-                    $formattedPermissions[] = $group . '::' . $permission;
+                if ($enabled || ! $filterOnEnabled) {
+                    $formattedPermissions[] = $group.'::'.$permission;
                 }
             }
         }

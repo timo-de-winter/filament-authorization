@@ -26,7 +26,7 @@ class SyncPermissionsCommand extends Command
 
         $existingPermissions = Permission::where('guard_name', $guard)->get()->keyBy('name');
 
-        $existingPermissions->diffKeys(collect($permissions)->mapWithKeys(fn($p) => [$p => $p]))->each->delete();
+        $existingPermissions->diffKeys(collect($permissions)->mapWithKeys(fn ($p) => [$p => $p]))->each->delete();
 
         foreach ($permissions as $permission) {
             if ($existingPermissions->has($permission)) {

@@ -69,9 +69,9 @@ class RoleResource extends Resource
                                 ->required()
                                 ->visible(fn () => config('filament-authorization.guard.modifiable'))
                                 ->options(function () {
-                                   return collect(array_keys(config('auth.guards')))
-                                       ->mapWithKeys(fn (string $key) => [$key => $key])
-                                       ->toArray();
+                                    return collect(array_keys(config('auth.guards')))
+                                        ->mapWithKeys(fn (string $key) => [$key => $key])
+                                        ->toArray();
                                 }),
                         ]),
 
