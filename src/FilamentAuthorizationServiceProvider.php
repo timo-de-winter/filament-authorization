@@ -18,8 +18,7 @@ class FilamentAuthorizationServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasTranslations()
-            ->hasCommand(SyncPermissionsCommand::class)
-            ->hasMigration('create_filament_authorization_table');
+            ->hasCommand(SyncPermissionsCommand::class);
     }
 
     public function packageBooted(): void
