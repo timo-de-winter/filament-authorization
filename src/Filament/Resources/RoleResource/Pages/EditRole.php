@@ -4,6 +4,9 @@ namespace TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource\Pag
 
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource;
 
 class EditRole extends EditRecord
@@ -16,4 +19,24 @@ class EditRole extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['permissions'] = FilamentAuthorization::formatPermissionsFromDatabase($this->record->permissions);
+
+        return $data;
+    }
+
+    protected function handleRecordUpdate(Model $record, array $data): Model
+    {
+        $record->update(Arr::except($data, 'permissions'));
+
+        $record->syncPermissions(
+            FilamentAuthorization::formatPermissionsForDatabase($data['permissions'])
+        );
+
+        return $record;
+    }
+
+
 }

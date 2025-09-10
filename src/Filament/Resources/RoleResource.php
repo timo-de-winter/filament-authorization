@@ -58,7 +58,11 @@ class RoleResource extends Resource
                                 ->label(__('filament-authorization::labels.name'))
                                 ->maxLength(255)
                                 ->required()
-                                ->unique(config('permission.table_names.roles'), 'name'),
+                                ->unique(
+                                    table: config('permission.table_names.roles'),
+                                    column: 'name',
+                                    ignoreRecord: true
+                                ),
 
                             Select::make('guard_name')
                                 ->label(__('filament-authorization::labels.guard_name'))

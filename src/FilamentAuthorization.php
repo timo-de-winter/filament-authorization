@@ -3,6 +3,7 @@
 namespace TimoDeWinter\FilamentAuthorization;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class FilamentAuthorization
 {
@@ -51,5 +52,18 @@ class FilamentAuthorization
         }
 
         return $formattedPermissions;
+    }
+
+    public function formatPermissionsFromDatabase(Collection $permissions): array
+    {
+        $output = [];
+
+        foreach ($permissions as $permission) {
+            [$group, $permission] = explode('::', $permission->name);
+
+            $output[$group][$permission] = true;
+        }
+
+        return $output;
     }
 }
