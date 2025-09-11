@@ -86,11 +86,21 @@ class RoleResource extends Resource
         return self::getCustomTable($table, function (CustomizableTable $table) {
             return $table
                 ->defaultColumns([
-                    TextColumn::make('guard_name'),
-
                     TextColumn::make('name')
+                        ->label(__('filament-authorization::labels.name'))
                         ->searchable()
                         ->sortable(),
+
+                    TextColumn::make('permissions_count')
+                        ->label(__('filament-authorization::labels.permissions_count'))
+                        ->counts('permissions')
+                        ->badge()
+                        ->sortable(),
+
+                    TextColumn::make('guard_name')
+                        ->toggleable()
+                        ->sortable()
+                        ->visible(fn () => config('filament-authorization.guard.modifiable')),
                 ])
                 ->defaultActions([
                     EditAction::make(),

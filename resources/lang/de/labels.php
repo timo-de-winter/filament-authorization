@@ -9,4 +9,5 @@ return [
     'update' => 'Aktualisieren',
     'create' => 'Erstellen',
     'delete' => 'Löschen',
+    'permissions_count' => 'Anzahl der Berechtigungen',
 ];
