@@ -20,6 +20,9 @@ This package makes use of `spatie/laravel-permission`, so if you have not done s
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
 
+### Prepare your model
+Follow [these](https://spatie.be/docs/laravel-permission/v6/prerequisites) instructions to prepare your model to work with roles.
+
 [//]: # (todo: BELOW SHOULD BE UPDATED STILL)
 
 
