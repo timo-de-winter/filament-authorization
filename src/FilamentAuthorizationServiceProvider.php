@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\Permission\Models\Role;
+use TimoDeWinter\FilamentAuthorization\Console\Commands\CreateAdminRoleCommand;
 use TimoDeWinter\FilamentAuthorization\Console\Commands\SyncPermissionsCommand;
 use TimoDeWinter\FilamentAuthorization\Policies\RolePolicy;
 
@@ -18,7 +19,10 @@ class FilamentAuthorizationServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasTranslations()
-            ->hasCommand(SyncPermissionsCommand::class);
+            ->hasCommands(
+                SyncPermissionsCommand::class,
+                CreateAdminRoleCommand::class,
+            );
     }
 
     public function packageBooted(): void
