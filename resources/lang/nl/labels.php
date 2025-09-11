@@ -9,4 +9,5 @@ return [
     'update' => 'Bijwerken',
     'create' => 'Maken',
     'delete' => 'Verwijderen',
+    'permissions_count' => 'Aantal machtigingen',
 ];
