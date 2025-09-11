@@ -23,18 +23,8 @@ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvid
 ### Prepare your model
 Follow [these](https://spatie.be/docs/laravel-permission/v6/prerequisites) instructions to prepare your model to work with roles.
 
-[//]: # (todo: BELOW SHOULD BE UPDATED STILL)
-
-
-
-
-You can publish and run the migrations with:
-```bash
-php artisan vendor:publish --tag="filament-authorization-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
+### Configuration
+You can optionally publish the config file with:
 ```bash
 php artisan vendor:publish --tag="filament-authorization-config"
 ```
@@ -42,6 +32,10 @@ php artisan vendor:publish --tag="filament-authorization-config"
 This is the contents of the published config file:
 ```php
 return [
+    'guard' => [
+        'modifiable' => false,
+        'default' => 'web',
+    ],
 ];
 ```
 
@@ -52,8 +46,17 @@ php artisan vendor:publish --tag="filament-authorization-views"
 
 ## Usage
 ```php
-$filamentAuthorization = new TimoDeWinter\FilamentAuthorization();
-echo $filamentAuthorization->echoPhrase('Hello, TimoDeWinter!');
+$panel
+    ->plugin(
+        \TimoDeWinter\FilamentAuthorization\FilamentAuthorizationPlugin::make(),
+    );
+
+// You can chain modifications to the resource. (see timo-de-winter/filament-modifiable-plugins for all options)
+$panel
+    ->plugin(
+        \TimoDeWinter\FilamentAuthorization\FilamentAuthorizationPlugin::make()
+            ->navigationSort(3),
+    );
 ```
 
 ### Synchronisation command
@@ -62,13 +65,16 @@ The package comes with a command to synchronize all permissions to the database.
 php artisan authorization:sync-permissions
 ```
 
+### Admin role and user command
+The package comes with a command to easily create an admin role and assign it to a user from the console.
+```bash
+php artisan authorization:create-admin-role
+```
+
 ## Testing
 ```bash
 composer test
 ```
-
-## Changelog
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 ## Security Vulnerabilities
 Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
