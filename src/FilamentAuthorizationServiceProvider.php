@@ -32,7 +32,7 @@ class FilamentAuthorizationServiceProvider extends PackageServiceProvider
             'update' => __('filament-authorization::labels.update'),
             'create' => __('filament-authorization::labels.create'),
             'delete' => __('filament-authorization::labels.delete'),
-        ], 'roles');
+        ], 'roles', __('filament-authorization::labels.roles'));
 
         Gate::policy(Role::class, RolePolicy::class);
     }

@@ -52,7 +52,7 @@ class PermissionsSelect
             ->schema(
                 collect(FilamentAuthorization::getPrefixGroups($tab))
                     ->map(function (string $group) use ($name, $tab) {
-                        return Fieldset::make(ucfirst($group))
+                        return Fieldset::make(FilamentAuthorization::getPrefixTranslation($group))
                             ->columnSpan(1)
                             ->schema(function () use ($name, $tab, $group) {
                                 return collect(FilamentAuthorization::getPermissions($tab, $group))
