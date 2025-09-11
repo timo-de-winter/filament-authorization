@@ -59,6 +59,36 @@ $panel
     );
 ```
 
+### Providing/injecting permissions
+The philosophy of this package is that permissions are defined by your application and not by the permissions as stated in your database.
+This is useful when you're working with a package-first strategy. My problem was that I want my packages to work independently from each other, but most of the time a lot of them are combined to create a bigger product.
+Within those applications I want a single resource for role management that allows for any permissions provided by any of the packages to be attached. Since the packages work standalone and can also choose to disable their permission system it is important that there was one modular approach to inject permissions from any of the packages.
+
+Injecting permissions is very easy and can be done in any service provider.
+The structure is as follows:
+- Tabs (optional)
+- Prefix
+- Permission
+
+Tabs are used to group permissions together in a tab in the resource to give more clarity to the user. You might have a tab named "Default" and one named "Advanced". If there is only 1 tab in total, we do not show tabs at all.
+Prefixes are mainly used to group permissions together under a given prefix to prevent overlap.
+And then of course there are permissions.
+
+```php
+// This is the most simple way to do it
+\TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization::registerPermission(
+    permission: [
+        'view' => __('filament-authorization::labels.view'),
+        'update' => __('filament-authorization::labels.update'),
+        'create' => __('filament-authorization::labels.create'),
+        'delete' => __('filament-authorization::labels.delete'),
+    ],
+    prefix: 'roles', 
+    prefixTranslation: __('filament-authorization::labels.roles'),
+    tab: 'Authorization', // Optional (defaults to "Default")
+);
+```
+
 ### Synchronisation command
 The package comes with a command to synchronize all permissions to the database. In most use cases it would be smart to add this command to your deployment script:
 ```bash

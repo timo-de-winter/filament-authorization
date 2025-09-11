@@ -9,14 +9,23 @@ class FilamentAuthorization
 {
     public array $permissions = [];
 
-    public function registerPermission(string|array $permission, $prefix = 'default', $tab = 'Default'): static
+    public array $prefixTranslations = [];
+
+    public function registerPermission(string|array $permission, string $prefix, string $prefixTranslation, $tab = 'Default'): static
     {
         $this->permissions[$tab][$prefix] = [
             ...($this->permissions[$tab][$prefix] ?? []),
             ...Arr::wrap($permission),
         ];
 
+        $this->prefixTranslations[$prefix] = $prefixTranslation;
+
         return $this;
+    }
+
+    public function getPrefixTranslation(string $prefix): ?string
+    {
+        return $this->prefixTranslations[$prefix] ?? null;
     }
 
     public function getTabs(): array
