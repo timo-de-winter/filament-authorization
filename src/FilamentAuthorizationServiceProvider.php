@@ -2,22 +2,38 @@
 
 namespace TimoDeWinter\FilamentAuthorization;
 
+use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Spatie\Permission\Models\Role;
+use TimoDeWinter\FilamentAuthorization\Console\Commands\CreateAdminRoleCommand;
+use TimoDeWinter\FilamentAuthorization\Console\Commands\SyncPermissionsCommand;
+use TimoDeWinter\FilamentAuthorization\Policies\RolePolicy;
 
 class FilamentAuthorizationServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
         $package
             ->name('filament-authorization')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_filament_authorization_table');
+            ->hasTranslations()
+            ->hasCommands(
+                SyncPermissionsCommand::class,
+                CreateAdminRoleCommand::class,
+            );
+    }
+
+    public function packageBooted(): void
+    {
+        \TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization::registerPermission([
+            'view' => __('filament-authorization::labels.view'),
+            'update' => __('filament-authorization::labels.update'),
+            'create' => __('filament-authorization::labels.create'),
+            'delete' => __('filament-authorization::labels.delete'),
+        ], 'roles');
+
+        Gate::policy(Role::class, RolePolicy::class);
     }
 }

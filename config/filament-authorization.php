@@ -1,6 +1,8 @@
 <?php
 
-// config for TimoDeWinter/FilamentAuthorization
 return [
-
+    'guard' => [
+        'modifiable' => false,
+        'default' => 'web',
+    ],
 ];

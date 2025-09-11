@@ -1,11 +1,11 @@
-# Easy authorization system for filament, with advanced features to inject permissions from different places.
+# Filament Authorization
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/timo-de-winter/filament-authorization.svg?style=flat-square)](https://packagist.org/packages/timo-de-winter/filament-authorization)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/timo-de-winter/filament-authorization/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/timo-de-winter/filament-authorization/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/timo-de-winter/filament-authorization/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/timo-de-winter/filament-authorization/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/timo-de-winter/filament-authorization.svg?style=flat-square)](https://packagist.org/packages/timo-de-winter/filament-authorization)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Easy authorization system for filament, with advanced features to inject permissions from different places.
 ## Installation
 
 You can install the package via composer:
@@ -13,13 +13,18 @@ You can install the package via composer:
 composer require timo-de-winter/filament-authorization
 ```
 
-You can publish and run the migrations with:
+### Migrations
+This package makes use of `spatie/laravel-permission`, so if you have not done so already, publish the migrations for this plugin:
+
 ```bash
-php artisan vendor:publish --tag="filament-authorization-migrations"
-php artisan migrate
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
 
-You can publish the config file with:
+### Prepare your model
+Follow [these](https://spatie.be/docs/laravel-permission/v6/prerequisites) instructions to prepare your model to work with roles.
+
+### Configuration
+You can optionally publish the config file with:
 ```bash
 php artisan vendor:publish --tag="filament-authorization-config"
 ```
@@ -27,6 +32,10 @@ php artisan vendor:publish --tag="filament-authorization-config"
 This is the contents of the published config file:
 ```php
 return [
+    'guard' => [
+        'modifiable' => false,
+        'default' => 'web',
+    ],
 ];
 ```
 
@@ -37,17 +46,35 @@ php artisan vendor:publish --tag="filament-authorization-views"
 
 ## Usage
 ```php
-$filamentAuthorization = new TimoDeWinter\FilamentAuthorization();
-echo $filamentAuthorization->echoPhrase('Hello, TimoDeWinter!');
+$panel
+    ->plugin(
+        \TimoDeWinter\FilamentAuthorization\FilamentAuthorizationPlugin::make(),
+    );
+
+// You can chain modifications to the resource. (see timo-de-winter/filament-modifiable-plugins for all options)
+$panel
+    ->plugin(
+        \TimoDeWinter\FilamentAuthorization\FilamentAuthorizationPlugin::make()
+            ->navigationSort(3),
+    );
+```
+
+### Synchronisation command
+The package comes with a command to synchronize all permissions to the database. In most use cases it would be smart to add this command to your deployment script:
+```bash
+php artisan authorization:sync-permissions
+```
+
+### Admin role and user command
+The package comes with a command to easily create an admin role and assign it to a user from the console.
+```bash
+php artisan authorization:create-admin-role
 ```
 
 ## Testing
 ```bash
 composer test
 ```
-
-## Changelog
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 ## Security Vulnerabilities
 Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
