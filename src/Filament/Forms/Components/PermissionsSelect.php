@@ -4,13 +4,11 @@ namespace TimoDeWinter\FilamentAuthorization\Filament\Forms\Components;
 
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Illuminate\Support\Arr;
 use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 
 class PermissionsSelect
@@ -63,7 +61,7 @@ class PermissionsSelect
                                 Action::make('selected')
                                     ->badge()
                                     ->label(function (Get $get) use ($tab, $group, $name) {
-                                        return collect($allPermissions = FilamentAuthorization::getPermissions($tab, $group))->filter(fn (string|int $permission, int|string $key) => $get(implode('.', [$name, $group, $key])))->count() . ' / ' . count($allPermissions);
+                                        return collect($allPermissions = FilamentAuthorization::getPermissions($tab, $group))->filter(fn (string|int $permission, int|string $key) => $get(implode('.', [$name, $group, $key])))->count().' / '.count($allPermissions);
                                     })
                                     ->disabled()
                                     ->color('info'),
@@ -78,9 +76,9 @@ class PermissionsSelect
                                         $allEnabled = collect(FilamentAuthorization::getPermissions($tab, $group))->filter(fn (string|int $permission, int|string $key) => $get(implode('.', [$name, $group, $key])))->count();
 
                                         foreach (FilamentAuthorization::getPermissions($tab, $group) as $key => $permission) {
-                                            $set(implode('.', [$name, $group, $key]), !$allEnabled);
+                                            $set(implode('.', [$name, $group, $key]), ! $allEnabled);
                                         }
-                                    })
+                                    }),
                             ])
                             ->schema(function () use ($name, $tab, $group) {
                                 return collect(FilamentAuthorization::getPermissions($tab, $group))
