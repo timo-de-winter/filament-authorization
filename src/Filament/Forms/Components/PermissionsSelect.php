@@ -2,11 +2,15 @@
 
 namespace TimoDeWinter\FilamentAuthorization\Filament\Forms\Components;
 
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Illuminate\Support\Arr;
 use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 
 class PermissionsSelect
@@ -46,18 +50,43 @@ class PermissionsSelect
             ->columns([
                 'xs' => 1,
                 'md' => 2,
-                'lg' => 3,
-                'xl' => 4,
+                'lg' => 4,
             ])
             ->schema(
                 collect(FilamentAuthorization::getPrefixGroups($tab))
                     ->map(function (string $group) use ($name, $tab) {
-                        return Fieldset::make(FilamentAuthorization::getPrefixTranslation($group))
+                        return Section::make(FilamentAuthorization::getPrefixTranslation($group))
+                            ->collapsible()
+                            ->collapsed()
                             ->columnSpan(1)
+                            ->headerActions([
+                                Action::make('selected')
+                                    ->badge()
+                                    ->label(function (Get $get) use ($tab, $group, $name) {
+                                        return collect($allPermissions = FilamentAuthorization::getPermissions($tab, $group))->filter(fn (string|int $permission, int|string $key) => $get(implode('.', [$name, $group, $key])))->count() . ' / ' . count($allPermissions);
+                                    })
+                                    ->disabled()
+                                    ->color('info'),
+                                Action::make('toggleAll')
+                                    ->iconButton()
+                                    ->icon(function (Get $get) use ($tab, $group, $name) {
+                                        return collect(FilamentAuthorization::getPermissions($tab, $group))->filter(fn (string|int $permission, int|string $key) => $get(implode('.', [$name, $group, $key])))->count()
+                                            ? 'heroicon-o-bars-arrow-down'
+                                            : 'heroicon-o-bars-arrow-up';
+                                    })
+                                    ->action(function (Set $set, Get $get) use ($name, $tab, $group) {
+                                        $allEnabled = collect(FilamentAuthorization::getPermissions($tab, $group))->filter(fn (string|int $permission, int|string $key) => $get(implode('.', [$name, $group, $key])))->count();
+
+                                        foreach (FilamentAuthorization::getPermissions($tab, $group) as $key => $permission) {
+                                            $set(implode('.', [$name, $group, $key]), !$allEnabled);
+                                        }
+                                    })
+                            ])
                             ->schema(function () use ($name, $tab, $group) {
                                 return collect(FilamentAuthorization::getPermissions($tab, $group))
                                     ->map(function (string|int $permission, int|string $key) use ($name, $group) {
                                         return Checkbox::make(implode('.', [$name, $group, $key]))
+                                            ->live()
                                             ->label(is_string($permission) ? $permission : ucfirst($key));
                                     })
                                     ->toArray();
