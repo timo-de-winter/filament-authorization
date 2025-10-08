@@ -31,7 +31,7 @@ class CreateRole extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        $record = new ($this->getModel())(Arr::except($data, 'permissions'));
+        $record = new ($this->getModel())(Arr::only($data, config('permission.models.role')::make()->getFillable()));
 
         if (
             static::getResource()::isScopedToTenant() &&

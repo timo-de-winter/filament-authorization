@@ -29,7 +29,7 @@ class EditRole extends EditRecord
 
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        $record->update(Arr::except($data, 'permissions'));
+        $record->update(Arr::only($data, config('permission.models.role')::make()->getFillable()));
 
         $record->syncPermissions(
             FilamentAuthorization::formatPermissionsForDatabase($data['permissions'])
