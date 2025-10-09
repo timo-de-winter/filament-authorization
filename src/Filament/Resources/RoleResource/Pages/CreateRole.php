@@ -5,7 +5,6 @@ namespace TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource\Pag
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource;
 
@@ -33,7 +32,7 @@ class CreateRole extends CreateRecord
     {
         $record = new ($this->getModel())([
             'name' => $data['name'],
-            'guard_name'  => $data['guard_name'],
+            'guard_name' => $data['guard_name'],
         ]);
 
         if (
