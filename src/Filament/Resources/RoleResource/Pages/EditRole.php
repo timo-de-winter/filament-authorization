@@ -26,6 +26,15 @@ class EditRole extends EditRecord
         return $data;
     }
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (! config('filament-authorization.guard.modifiable')) {
+            $data['guard_name'] = config('filament-authorization.guard.default');
+        }
+
+        return $data;
+    }
+
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
         $record->update([
