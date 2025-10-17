@@ -1,12 +1,12 @@
 <?php
 
-namespace TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource\Pages;
+namespace TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
 use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
-use TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource;
+use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\RoleResource;
 
 class EditRole extends EditRecord
 {
