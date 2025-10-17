@@ -1,6 +1,6 @@
 <?php
 
-namespace TimoDeWinter\FilamentAuthorization\Filament\Forms\Components;
+namespace TimoDeWinter\FilamentAuthorization\Filament\Schemas\Components;
 
 use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;

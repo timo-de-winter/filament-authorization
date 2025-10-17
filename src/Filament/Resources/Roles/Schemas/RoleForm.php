@@ -6,7 +6,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use TimoDeWinter\FilamentAuthorization\Filament\Forms\Components\PermissionsSelect;
+use TimoDeWinter\FilamentAuthorization\Filament\Schemas\Components\PermissionsSelect;
 
 class RoleForm
 {
