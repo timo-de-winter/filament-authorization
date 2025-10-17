@@ -1,12 +1,12 @@
 <?php
 
-namespace TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource\Pages;
+namespace TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Pages;
 
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
-use TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource;
+use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\RoleResource;
 
 class CreateRole extends CreateRecord
 {
