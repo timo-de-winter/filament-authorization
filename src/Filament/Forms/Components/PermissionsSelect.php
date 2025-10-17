@@ -2,13 +2,14 @@
 
 namespace TimoDeWinter\FilamentAuthorization\Filament\Forms\Components;
 
-use Filament\Forms\Components\Actions\Action;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\Grid;
+use Filament\Actions\Action;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Tabs;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 
 class PermissionsSelect
@@ -31,7 +32,7 @@ class PermissionsSelect
     {
         return Tabs::make()
             ->tabs(array_map(function (string $tab) use ($name) {
-                return Tabs\Tab::make($tab)
+                return Tab::make($tab)
                     ->schema([
                         self::getPrefixGrid($name, $tab, true),
                     ]);

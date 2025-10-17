@@ -2,6 +2,7 @@
 
 namespace TimoDeWinter\FilamentAuthorization;
 
+use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -27,7 +28,7 @@ class FilamentAuthorizationServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        \TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization::registerPermission([
+        FilamentAuthorization::registerPermission([
             'view' => __('filament-authorization::labels.view'),
             'update' => __('filament-authorization::labels.update'),
             'create' => __('filament-authorization::labels.create'),
