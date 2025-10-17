@@ -2,15 +2,18 @@
 
 namespace TimoDeWinter\FilamentAuthorization\Filament\Resources;
 
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource\Pages\ListRoles;
+use TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource\Pages\CreateRole;
+use TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource\Pages\EditRole;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use TimoDeWinter\FilamentAuthorization\Filament\Forms\Components\PermissionsSelect;
@@ -34,7 +37,7 @@ class RoleResource extends Resource
 
     protected static ?string $slug = 'roles';
 
-    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-shield-check';
 
     public static function getModelLabel(): string
     {
@@ -46,11 +49,11 @@ class RoleResource extends Resource
         return __('filament-authorization::labels.roles');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return self::getCustomForm($form, function (Form $form) {
-            return $form
-                ->schema([
+        return self::getCustomForm($schema, function (Schema $schema) {
+            return $schema
+                ->components([
                     Section::make()
                         ->columns()
                         ->schema([
@@ -122,9 +125,9 @@ class RoleResource extends Resource
     public static function getPages(): array
     {
         return self::getCustomPages([
-            'index' => Pages\ListRoles::route('/'),
-            'create' => Pages\CreateRole::route('/create'),
-            'edit' => Pages\EditRole::route('/{record}/edit'),
+            'index' => ListRoles::route('/'),
+            'create' => CreateRole::route('/create'),
+            'edit' => EditRole::route('/{record}/edit'),
         ]);
     }
 }
