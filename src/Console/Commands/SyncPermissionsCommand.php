@@ -2,9 +2,9 @@
 
 namespace TimoDeWinter\FilamentAuthorization\Console\Commands;
 
-use Spatie\Permission\PermissionRegistrar;
 use Illuminate\Console\Command;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 
 class SyncPermissionsCommand extends Command

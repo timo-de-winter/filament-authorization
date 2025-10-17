@@ -2,14 +2,14 @@
 
 namespace TimoDeWinter\FilamentAuthorization\Filament\Forms\Components;
 
-use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Tabs\Tab;
-use Filament\Schemas\Components\Grid;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Checkbox;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
-use Filament\Forms\Components\Checkbox;
 use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 
 class PermissionsSelect

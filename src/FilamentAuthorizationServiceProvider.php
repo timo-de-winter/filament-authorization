@@ -2,13 +2,13 @@
 
 namespace TimoDeWinter\FilamentAuthorization;
 
-use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 use Illuminate\Support\Facades\Gate;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\Permission\Models\Role;
 use TimoDeWinter\FilamentAuthorization\Console\Commands\CreateAdminRoleCommand;
 use TimoDeWinter\FilamentAuthorization\Console\Commands\SyncPermissionsCommand;
+use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 use TimoDeWinter\FilamentAuthorization\Policies\RolePolicy;
 
 class FilamentAuthorizationServiceProvider extends PackageServiceProvider

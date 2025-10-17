@@ -7,7 +7,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource\Pages;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Pages\CreateRole;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Pages\EditRole;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Pages\ListRoles;
@@ -32,7 +31,7 @@ class RoleResource extends Resource
 
     protected static ?string $slug = 'roles';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedShieldCheck;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldCheck;
 
     public static function getModelLabel(): string
     {
