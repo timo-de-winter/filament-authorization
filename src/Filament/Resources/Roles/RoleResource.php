@@ -19,11 +19,6 @@ class RoleResource extends Resource
 {
     use CanBeModified;
 
-    public static function getPluginId(): string
-    {
-        return 'filament-authorization';
-    }
-
     public static function getModel(): string
     {
         return config('permission.models.role');
