@@ -51,13 +51,14 @@ class PermissionsSelect
                 'md' => 2,
                 'lg' => 4,
             ])
-            ->schema(
+            ->components(
                 collect(FilamentAuthorization::getPrefixGroups($tab))
                     ->map(function (string $group) use ($name, $tab) {
                         return Section::make(FilamentAuthorization::getPrefixTranslation($group))
                             ->collapsible()
                             ->collapsed()
                             ->columnSpan(1)
+                            ->key('permission-group-' . $group)
                             ->headerActions([
                                 Action::make('selected')
                                     ->badge()
@@ -81,7 +82,7 @@ class PermissionsSelect
                                         }
                                     }),
                             ])
-                            ->schema(function () use ($name, $tab, $group) {
+                            ->components(function () use ($name, $tab, $group) {
                                 return collect(FilamentAuthorization::getPermissions($tab, $group))
                                     ->map(function (string|int $permission, int|string $key) use ($name, $group) {
                                         return Checkbox::make(implode('.', [$name, $group, $key]))

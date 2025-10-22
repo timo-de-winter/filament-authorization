@@ -40,7 +40,7 @@ class RoleResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return self::getCustomForm($schema, function (Schema $schema) {
+        return self::getCustomSchema($schema, function (Schema $schema) {
             return RoleForm::configure($schema);
         });
     }
