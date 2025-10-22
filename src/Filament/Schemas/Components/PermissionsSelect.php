@@ -58,7 +58,7 @@ class PermissionsSelect
                             ->collapsible()
                             ->collapsed()
                             ->columnSpan(1)
-                            ->key('permission-group-' . $group)
+                            ->key('permission-group-'.$group)
                             ->headerActions([
                                 Action::make('selected')
                                     ->badge()
