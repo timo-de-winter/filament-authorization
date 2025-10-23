@@ -21,7 +21,7 @@
         "illuminate/contracts": "^11.0||^12.0",
         "spatie/laravel-package-tools": "^1.16",
         "spatie/laravel-permission": "^6.21",
-        "timo-de-winter/filament-modifiable-plugins": "*"
+        "timo-de-winter/filament-modifiable-plugins": "^3.0"
     },
     "require-dev": {
         "laravel/pint": "^1.14",
@@ -68,15 +68,6 @@
             }
         }
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../*",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
