@@ -1,14 +1,15 @@
 <?php
 
-namespace TimoDeWinter\FilamentAuthorization\Filament\Forms\Components;
+namespace TimoDeWinter\FilamentAuthorization\Filament\Schemas\Components;
 
-use Filament\Forms\Components\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Tabs;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 
 class PermissionsSelect
@@ -31,7 +32,7 @@ class PermissionsSelect
     {
         return Tabs::make()
             ->tabs(array_map(function (string $tab) use ($name) {
-                return Tabs\Tab::make($tab)
+                return Tab::make($tab)
                     ->schema([
                         self::getPrefixGrid($name, $tab, true),
                     ]);
@@ -50,13 +51,14 @@ class PermissionsSelect
                 'md' => 2,
                 'lg' => 4,
             ])
-            ->schema(
+            ->components(
                 collect(FilamentAuthorization::getPrefixGroups($tab))
                     ->map(function (string $group) use ($name, $tab) {
                         return Section::make(FilamentAuthorization::getPrefixTranslation($group))
                             ->collapsible()
                             ->collapsed()
                             ->columnSpan(1)
+                            ->key('permission-group-'.$group)
                             ->headerActions([
                                 Action::make('selected')
                                     ->badge()
@@ -80,7 +82,7 @@ class PermissionsSelect
                                         }
                                     }),
                             ])
-                            ->schema(function () use ($name, $tab, $group) {
+                            ->components(function () use ($name, $tab, $group) {
                                 return collect(FilamentAuthorization::getPermissions($tab, $group))
                                     ->map(function (string|int $permission, int|string $key) use ($name, $group) {
                                         return Checkbox::make(implode('.', [$name, $group, $key]))

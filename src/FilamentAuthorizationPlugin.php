@@ -4,7 +4,7 @@ namespace TimoDeWinter\FilamentAuthorization;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource;
+use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\RoleResource;
 use TimoDeWinter\FilamentModifiablePlugins\Concerns\CanModifyResources;
 
 class FilamentAuthorizationPlugin implements Plugin

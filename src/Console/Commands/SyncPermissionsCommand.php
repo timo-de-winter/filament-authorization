@@ -4,6 +4,7 @@ namespace TimoDeWinter\FilamentAuthorization\Console\Commands;
 
 use Illuminate\Console\Command;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 
 class SyncPermissionsCommand extends Command
@@ -39,6 +40,6 @@ class SyncPermissionsCommand extends Command
             ]);
         }
 
-        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+        app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }

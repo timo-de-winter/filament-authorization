@@ -1,10 +1,10 @@
 <?php
 
-namespace TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource\Pages;
+namespace TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use TimoDeWinter\FilamentAuthorization\Filament\Resources\RoleResource;
+use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\RoleResource;
 
 class ListRoles extends ListRecords
 {
