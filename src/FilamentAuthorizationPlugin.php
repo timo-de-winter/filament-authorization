@@ -5,15 +5,26 @@ namespace TimoDeWinter\FilamentAuthorization;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\RoleResource;
-use TimoDeWinter\FilamentModifiablePlugins\Concerns\CanModifyResources;
+use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\RoleResourceConfiguration;
 
 class FilamentAuthorizationPlugin implements Plugin
 {
-    use CanModifyResources;
+    /** @var array<RoleResourceConfiguration> */
+    protected array $roleResourceConfigurations = [];
 
     public function getId(): string
     {
         return 'filament-authorization';
+    }
+
+    /**
+     * @param  array<RoleResourceConfiguration>  $configurations
+     */
+    public function roleResource(array $configurations): static
+    {
+        $this->roleResourceConfigurations = $configurations;
+
+        return $this;
     }
 
     public function register(Panel $panel): void
@@ -21,6 +32,7 @@ class FilamentAuthorizationPlugin implements Plugin
         $panel
             ->resources([
                 RoleResource::class,
+                ...$this->roleResourceConfigurations,
             ]);
     }
 
