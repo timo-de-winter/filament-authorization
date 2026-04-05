@@ -7,14 +7,14 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use TimoDeWinter\FilamentModifiablePlugins\CustomizableTable;
+use Filament\Tables\Table;
 
 class RolesTable
 {
-    public static function configure(CustomizableTable $table): CustomizableTable
+    public static function configure(Table $table): Table
     {
         return $table
-            ->defaultColumns([
+            ->columns([
                 TextColumn::make('name')
                     ->label(__('filament-authorization::labels.name'))
                     ->searchable()
@@ -31,11 +31,11 @@ class RolesTable
                     ->sortable()
                     ->visible(fn () => config('filament-authorization.guard.modifiable')),
             ])
-            ->defaultRecordActions([
+            ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
             ])
-            ->defaultToolbarActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

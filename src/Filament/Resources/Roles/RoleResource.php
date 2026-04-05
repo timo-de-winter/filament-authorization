@@ -12,12 +12,11 @@ use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Pages\EditRole;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Pages\ListRoles;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Schemas\RoleForm;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Tables\RolesTable;
-use TimoDeWinter\FilamentModifiablePlugins\Concerns\CanBeModified;
-use TimoDeWinter\FilamentModifiablePlugins\CustomizableTable;
+use UnitEnum;
 
 class RoleResource extends Resource
 {
-    use CanBeModified;
+    protected static ?string $configurationClass = RoleResourceConfiguration::class;
 
     public static function getModel(): string
     {
@@ -38,31 +37,49 @@ class RoleResource extends Resource
         return __('filament-authorization::labels.roles');
     }
 
+    public static function getCluster(): ?string
+    {
+        if ($configuration = static::getConfiguration()) {
+            if ($cluster = $configuration->getCluster()) {
+                return $cluster;
+            }
+        }
+
+        return parent::getCluster();
+    }
+
+    public static function getNavigationGroup(): string|UnitEnum|null
+    {
+        if ($configuration = static::getConfiguration()) {
+            if ($group = $configuration->getNavigationGroup()) {
+                return $group;
+            }
+        }
+
+        return parent::getNavigationGroup();
+    }
+
     public static function form(Schema $schema): Schema
     {
-        return self::getCustomSchema($schema, function (Schema $schema) {
-            return RoleForm::configure($schema);
-        });
+        return RoleForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return self::getCustomTable($table, function (CustomizableTable $table) {
-            return RolesTable::configure($table);
-        });
+        return RolesTable::configure($table);
     }
 
     public static function getRelations(): array
     {
-        return self::getCustomRelations([]);
+        return [];
     }
 
     public static function getPages(): array
     {
-        return self::getCustomPages([
+        return [
             'index' => ListRoles::route('/'),
             'create' => CreateRole::route('/create'),
             'edit' => EditRole::route('/{record}/edit'),
-        ]);
+        ];
     }
 }
