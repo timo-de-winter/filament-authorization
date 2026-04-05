@@ -3,6 +3,7 @@
 namespace TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles;
 
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
