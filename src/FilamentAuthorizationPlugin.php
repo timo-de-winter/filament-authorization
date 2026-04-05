@@ -31,8 +31,9 @@ class FilamentAuthorizationPlugin implements Plugin
     {
         $panel
             ->resources([
-                RoleResource::class,
-                ...$this->roleResourceConfigurations,
+                ...empty($this->roleResourceConfigurations)
+                    ? [RoleResource::class]
+                    : $this->roleResourceConfigurations,
             ]);
     }
 
