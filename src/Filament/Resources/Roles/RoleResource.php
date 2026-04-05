@@ -39,7 +39,7 @@ class RoleResource extends Resource
 
     public static function getCluster(): ?string
     {
-        if ($configuration = static::getConfiguration()) {
+        if (Filament::getCurrentPanel() && ($configuration = static::getConfiguration())) {
             if ($cluster = $configuration->getCluster()) {
                 return $cluster;
             }
@@ -50,7 +50,7 @@ class RoleResource extends Resource
 
     public static function getNavigationGroup(): string|UnitEnum|null
     {
-        if ($configuration = static::getConfiguration()) {
+        if (Filament::getCurrentPanel() && ($configuration = static::getConfiguration())) {
             if ($group = $configuration->getNavigationGroup()) {
                 return $group;
             }
