@@ -9,16 +9,43 @@ class FilamentAuthorization
 {
     public array $permissions = [];
 
+    public array $descriptions = [];
+
     public array $prefixTranslations = [];
 
-    public function registerPermission(string|array $permission, string $prefix, string $prefixTranslation, $tab = 'Default'): static
-    {
-        $this->permissions[$tab][$prefix] = [
-            ...($this->permissions[$tab][$prefix] ?? []),
-            ...Arr::wrap($permission),
-        ];
+    public array $prefixDescriptions = [];
 
+    public array $tabOrder = [];
+
+    public function registerPermission(string|array $permission, string $prefix, string $prefixTranslation, $tab = 'Default', ?string $prefixDescription = null): static
+    {
+        $existing = $this->permissions[$tab][$prefix] ?? [];
+
+        foreach (Arr::wrap($permission) as $key => $value) {
+            if (is_array($value)) {
+                $existing[$key] = $value['label'] ?? (is_string($key) ? $key : (string) $key);
+
+                if (isset($value['description'])) {
+                    $this->descriptions[$prefix][$key] = $value['description'];
+                }
+            } else {
+                $existing[$key] = $value;
+            }
+        }
+
+        $this->permissions[$tab][$prefix] = $existing;
         $this->prefixTranslations[$prefix] = $prefixTranslation;
+
+        if ($prefixDescription !== null) {
+            $this->prefixDescriptions[$prefix] = $prefixDescription;
+        }
+
+        return $this;
+    }
+
+    public function setTabOrder(array $order): static
+    {
+        $this->tabOrder = $order;
 
         return $this;
     }
@@ -28,9 +55,28 @@ class FilamentAuthorization
         return $this->prefixTranslations[$prefix] ?? null;
     }
 
+    public function getPrefixDescription(string $prefix): ?string
+    {
+        return $this->prefixDescriptions[$prefix] ?? null;
+    }
+
+    public function getDescription(string $prefix, int|string $key): ?string
+    {
+        return $this->descriptions[$prefix][$key] ?? null;
+    }
+
     public function getTabs(): array
     {
-        return array_keys($this->permissions);
+        $registered = array_keys($this->permissions);
+
+        if ($this->tabOrder === []) {
+            return $registered;
+        }
+
+        $ordered = array_values(array_intersect($this->tabOrder, $registered));
+        $remaining = array_values(array_diff($registered, $ordered));
+
+        return [...$ordered, ...$remaining];
     }
 
     public function getPrefixGroups(string $tab): array
