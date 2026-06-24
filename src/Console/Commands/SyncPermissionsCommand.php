@@ -3,6 +3,7 @@
 namespace TimoDeWinter\FilamentAuthorization\Console\Commands;
 
 use Illuminate\Console\Command;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
 use TimoDeWinter\FilamentAuthorization\Facades\FilamentAuthorization;
 
@@ -15,7 +16,6 @@ class SyncPermissionsCommand extends Command
     public function handle(): void
     {
         $allPermissions = [];
-        $permissionClass = config('permission.models.permission');
 
         $guard = $this->argument('guard');
 
@@ -25,7 +25,7 @@ class SyncPermissionsCommand extends Command
 
         $permissions = FilamentAuthorization::formatPermissionsForDatabase($allPermissions, filterOnEnabled: false);
 
-        $existingPermissions = $permissionClass::where('guard_name', $guard)->get()->keyBy('name');
+        $existingPermissions = Permission::where('guard_name', $guard)->get()->keyBy('name');
 
         $existingPermissions->diffKeys(collect($permissions)->mapWithKeys(fn ($p) => [$p => $p]))->each->delete();
 
@@ -34,7 +34,7 @@ class SyncPermissionsCommand extends Command
                 continue;
             }
 
-            $permissionClass::create([
+            Permission::create([
                 'name' => $permission,
                 'guard_name' => $guard,
             ]);

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Laravel package that provides an authorization system for Filament admin panels. It integrates with `spatie/laravel-permission` to manage roles and permissions, and uses Filament's native configurable resources feature for customizable resources.
+This is a Laravel package that provides an authorization system for Filament admin panels. It integrates with `spatie/laravel-permission` to manage roles and permissions, and uses `timo-de-winter/filament-modifiable-plugins` for customizable resources.
 
 ## Development Commands
 
@@ -39,11 +39,13 @@ composer prepare                 # Discover packages (runs automatically after a
 ### Key Dependencies
 
 - **spatie/laravel-permission**: Handles the underlying role/permission system
+- **timo-de-winter/filament-modifiable-plugins**: Provides customization capabilities via `CanModifyResources` trait
 
 ### Resource Architecture
 
-Resources use Filament's configurable resources pattern:
-- `RoleResourceConfiguration` extends `ResourceConfiguration` for runtime customization
+Resources use the modifiable plugin pattern:
+- `CanBeModified` trait allows runtime customization
+- `CustomizableTable` provides flexible table configurations
 - Resources integrate with Spatie's permission models via `config('permission.models.role')`
 
 ### Configuration

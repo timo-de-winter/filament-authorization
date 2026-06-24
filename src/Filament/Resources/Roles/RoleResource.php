@@ -3,7 +3,6 @@
 namespace TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles;
 
 use BackedEnum;
-use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -13,11 +12,12 @@ use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Pages\EditRole;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Pages\ListRoles;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Schemas\RoleForm;
 use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\Tables\RolesTable;
-use UnitEnum;
+use TimoDeWinter\FilamentModifiablePlugins\Concerns\CanBeModified;
+use TimoDeWinter\FilamentModifiablePlugins\CustomizableTable;
 
 class RoleResource extends Resource
 {
-    protected static ?string $configurationClass = RoleResourceConfiguration::class;
+    use CanBeModified;
 
     public static function getModel(): string
     {
@@ -38,49 +38,31 @@ class RoleResource extends Resource
         return __('filament-authorization::labels.roles');
     }
 
-    public static function getCluster(): ?string
-    {
-        if (Filament::getCurrentPanel() && ($configuration = static::getConfiguration())) {
-            if ($cluster = $configuration->getCluster()) {
-                return $cluster;
-            }
-        }
-
-        return parent::getCluster();
-    }
-
-    public static function getNavigationGroup(): string|UnitEnum|null
-    {
-        if (Filament::getCurrentPanel() && ($configuration = static::getConfiguration())) {
-            if ($group = $configuration->getNavigationGroup()) {
-                return $group;
-            }
-        }
-
-        return parent::getNavigationGroup();
-    }
-
     public static function form(Schema $schema): Schema
     {
-        return RoleForm::configure($schema);
+        return self::getCustomSchema($schema, function (Schema $schema) {
+            return RoleForm::configure($schema);
+        });
     }
 
     public static function table(Table $table): Table
     {
-        return RolesTable::configure($table);
+        return self::getCustomTable($table, function (CustomizableTable $table) {
+            return RolesTable::configure($table);
+        });
     }
 
     public static function getRelations(): array
     {
-        return [];
+        return self::getCustomRelations([]);
     }
 
     public static function getPages(): array
     {
-        return [
+        return self::getCustomPages([
             'index' => ListRoles::route('/'),
             'create' => CreateRole::route('/create'),
             'edit' => EditRole::route('/{record}/edit'),
-        ];
+        ]);
     }
 }

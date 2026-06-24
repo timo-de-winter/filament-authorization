@@ -50,20 +50,12 @@ $panel
     ->plugin(
         \TimoDeWinter\FilamentAuthorization\FilamentAuthorizationPlugin::make(),
     );
-```
 
-### Configurable Resource
-The RoleResource supports Filament's [configurable resources](https://filamentphp.com/docs/5.x/plugins/configurable-resources-and-pages) feature. You can pass custom configurations to the plugin:
-
-```php
-use TimoDeWinter\FilamentAuthorization\Filament\Resources\Roles\RoleResource;
-
+// You can chain modifications to the resource. (see timo-de-winter/filament-modifiable-plugins for all options)
 $panel
     ->plugin(
         \TimoDeWinter\FilamentAuthorization\FilamentAuthorizationPlugin::make()
-            ->roleResource([
-                RoleResource::make('custom')->slug('custom-roles'),
-            ]),
+            ->navigationSort(3),
     );
 ```
 

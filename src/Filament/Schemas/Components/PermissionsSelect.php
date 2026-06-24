@@ -49,14 +49,14 @@ class PermissionsSelect
             ->columns([
                 'xs' => 1,
                 'md' => 2,
-                'lg' => 2,
+                'lg' => 4,
             ])
             ->components(
                 collect(FilamentAuthorization::getPrefixGroups($tab))
                     ->map(function (string $group) use ($name, $tab) {
                         return Section::make(FilamentAuthorization::getPrefixTranslation($group))
-                            ->description(FilamentAuthorization::getPrefixDescription($group))
                             ->collapsible()
+                            ->collapsed()
                             ->columnSpan(1)
                             ->key('permission-group-'.$group)
                             ->headerActions([
@@ -70,24 +70,9 @@ class PermissionsSelect
                                 Action::make('toggleAll')
                                     ->iconButton()
                                     ->icon(function (Get $get) use ($tab, $group, $name) {
-                                        $all = FilamentAuthorization::getPermissions($tab, $group);
-                                        $selected = collect($all)->filter(fn (string|int $permission, int|string $key) => $get(implode('.', [$name, $group, $key])))->count();
-
-                                        return match (true) {
-                                            $selected === 0 => 'heroicon-o-stop',
-                                            $selected === count($all) => 'heroicon-s-check-circle',
-                                            default => 'heroicon-s-minus-circle',
-                                        };
-                                    })
-                                    ->color(function (Get $get) use ($tab, $group, $name) {
-                                        $all = FilamentAuthorization::getPermissions($tab, $group);
-                                        $selected = collect($all)->filter(fn (string|int $permission, int|string $key) => $get(implode('.', [$name, $group, $key])))->count();
-
-                                        return match (true) {
-                                            $selected === 0 => 'gray',
-                                            $selected === count($all) => 'success',
-                                            default => 'warning',
-                                        };
+                                        return collect(FilamentAuthorization::getPermissions($tab, $group))->filter(fn (string|int $permission, int|string $key) => $get(implode('.', [$name, $group, $key])))->count()
+                                            ? 'heroicon-o-bars-arrow-down'
+                                            : 'heroicon-o-bars-arrow-up';
                                     })
                                     ->action(function (Set $set, Get $get) use ($name, $tab, $group) {
                                         $allEnabled = collect(FilamentAuthorization::getPermissions($tab, $group))->filter(fn (string|int $permission, int|string $key) => $get(implode('.', [$name, $group, $key])))->count();
@@ -102,8 +87,7 @@ class PermissionsSelect
                                     ->map(function (string|int $permission, int|string $key) use ($name, $group) {
                                         return Checkbox::make(implode('.', [$name, $group, $key]))
                                             ->live()
-                                            ->label(is_string($permission) ? $permission : ucfirst((string) $key))
-                                            ->helperText(FilamentAuthorization::getDescription($group, $key));
+                                            ->label(is_string($permission) ? $permission : ucfirst($key));
                                     })
                                     ->toArray();
                             });
