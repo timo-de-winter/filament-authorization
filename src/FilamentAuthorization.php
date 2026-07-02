@@ -2,6 +2,8 @@
 
 namespace TimoDeWinter\FilamentAuthorization;
 
+use Closure;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -10,6 +12,69 @@ class FilamentAuthorization
     public array $permissions = [];
 
     public array $prefixTranslations = [];
+
+    /**
+     * The gate the host application plugs a "may manage system roles" decision
+     * into (e.g. the CMS wires this to a super-admin check).
+     *
+     * @var (Closure(Authenticatable): bool)|null
+     */
+    protected ?Closure $authorizeSystemRoleManagementCallback = null;
+
+    /**
+     * Register who may create system roles and edit their protection flags
+     * (is_system, is_deletable, is_name_editable, are_permissions_editable).
+     *
+     * @param  Closure(Authenticatable): bool  $callback
+     */
+    public function authorizeSystemRoleManagementUsing(Closure $callback): static
+    {
+        $this->authorizeSystemRoleManagementCallback = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Whether the actor may manage the "system" aspects of roles. Fails closed:
+     * without a registered callback nobody may manage system roles, so a host
+     * that forgets to wire authorizeSystemRoleManagementUsing() does not silently
+     * let every user flag roles as protected.
+     */
+    public function canManageSystemRoles(Authenticatable $user): bool
+    {
+        if ($this->authorizeSystemRoleManagementCallback === null) {
+            return false;
+        }
+
+        return (bool) ($this->authorizeSystemRoleManagementCallback)($user);
+    }
+
+    /**
+     * The role columns only system-role managers may set.
+     *
+     * @return array<int, string>
+     */
+    public function systemRoleFlagColumns(): array
+    {
+        return ['is_system', 'is_deletable', 'is_name_editable', 'are_permissions_editable'];
+    }
+
+    /**
+     * Strip the system-role flag columns from submitted data unless the actor may
+     * manage them, so a non-manager cannot flag a role as a system role or alter
+     * its protections by tampering with the request payload.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    public function withoutUnmanageableSystemRoleFlags(array $data, bool $canManageSystemRoles): array
+    {
+        if ($canManageSystemRoles) {
+            return $data;
+        }
+
+        return Arr::except($data, $this->systemRoleFlagColumns());
+    }
 
     public function registerPermission(string|array $permission, string $prefix, string $prefixTranslation, $tab = 'Default'): static
     {

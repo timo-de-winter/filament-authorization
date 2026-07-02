@@ -20,10 +20,16 @@ class FilamentAuthorizationServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasTranslations()
+            ->hasMigration('add_system_role_columns_to_roles_table')
             ->hasCommands(
                 SyncPermissionsCommand::class,
                 CreateAdminRoleCommand::class,
             );
+    }
+
+    public function packageRegistered(): void
+    {
+        $this->app->singleton(\TimoDeWinter\FilamentAuthorization\FilamentAuthorization::class);
     }
 
     public function packageBooted(): void
