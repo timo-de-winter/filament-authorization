@@ -13,6 +13,15 @@ class FilamentAuthorization
 
     public array $prefixTranslations = [];
 
+    /** Per-permission help text, keyed by prefix then permission key. */
+    public array $descriptions = [];
+
+    /** Per-group help text, keyed by prefix. */
+    public array $prefixDescriptions = [];
+
+    /** Preferred tab order; tabs not listed here keep registration order and sort last. */
+    public array $tabOrder = [];
+
     /**
      * The gate the host application plugs a "may manage system roles" decision
      * into (e.g. the CMS wires this to a super-admin check).
@@ -76,14 +85,54 @@ class FilamentAuthorization
         return Arr::except($data, $this->systemRoleFlagColumns());
     }
 
-    public function registerPermission(string|array $permission, string $prefix, string $prefixTranslation, $tab = 'Default'): static
+    /**
+     * A permission may be given as a plain label or as an array shape carrying
+     * its own help text:
+     *
+     *     ['create' => 'Create invoices']
+     *     ['create' => ['label' => 'Create invoices', 'description' => 'Also allows drafts']]
+     *
+     * @param  string|array<int|string, string|array{label?: string, description?: string}>  $permission
+     */
+    public function registerPermission(string|array $permission, string $prefix, string $prefixTranslation, $tab = 'Default', ?string $prefixDescription = null): static
     {
+        $incoming = [];
+
+        foreach (Arr::wrap($permission) as $key => $value) {
+            if (is_array($value)) {
+                $incoming[$key] = $value['label'] ?? (is_string($key) ? $key : (string) $key);
+
+                if (isset($value['description'])) {
+                    $this->descriptions[$prefix][$key] = $value['description'];
+                }
+            } else {
+                $incoming[$key] = $value;
+            }
+        }
+
         $this->permissions[$tab][$prefix] = [
             ...($this->permissions[$tab][$prefix] ?? []),
-            ...Arr::wrap($permission),
+            ...$incoming,
         ];
 
         $this->prefixTranslations[$prefix] = $prefixTranslation;
+
+        if ($prefixDescription !== null) {
+            $this->prefixDescriptions[$prefix] = $prefixDescription;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Pin the leading tabs. Registered tabs missing from $order keep their
+     * registration order and follow the pinned ones.
+     *
+     * @param  array<int, string>  $order
+     */
+    public function setTabOrder(array $order): static
+    {
+        $this->tabOrder = $order;
 
         return $this;
     }
@@ -93,9 +142,28 @@ class FilamentAuthorization
         return $this->prefixTranslations[$prefix] ?? null;
     }
 
+    public function getPrefixDescription(string $prefix): ?string
+    {
+        return $this->prefixDescriptions[$prefix] ?? null;
+    }
+
+    public function getDescription(string $prefix, int|string $key): ?string
+    {
+        return $this->descriptions[$prefix][$key] ?? null;
+    }
+
     public function getTabs(): array
     {
-        return array_keys($this->permissions);
+        $registered = array_keys($this->permissions);
+
+        if ($this->tabOrder === []) {
+            return $registered;
+        }
+
+        $ordered = array_values(array_intersect($this->tabOrder, $registered));
+        $remaining = array_values(array_diff($registered, $ordered));
+
+        return [...$ordered, ...$remaining];
     }
 
     public function getPrefixGroups(string $tab): array

@@ -55,6 +55,7 @@ class PermissionsSelect
                 collect(FilamentAuthorization::getPrefixGroups($tab))
                     ->map(function (string $group) use ($name, $tab) {
                         return Section::make(FilamentAuthorization::getPrefixTranslation($group))
+                            ->description(FilamentAuthorization::getPrefixDescription($group))
                             ->collapsible()
                             ->collapsed()
                             ->columnSpan(1)
@@ -87,7 +88,8 @@ class PermissionsSelect
                                     ->map(function (string|int $permission, int|string $key) use ($name, $group) {
                                         return Checkbox::make(implode('.', [$name, $group, $key]))
                                             ->live()
-                                            ->label(is_string($permission) ? $permission : ucfirst($key));
+                                            ->label(is_string($permission) ? $permission : ucfirst((string) $key))
+                                            ->helperText(FilamentAuthorization::getDescription($group, $key));
                                     })
                                     ->toArray();
                             });
