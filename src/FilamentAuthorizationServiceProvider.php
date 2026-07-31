@@ -34,12 +34,17 @@ class FilamentAuthorizationServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        FilamentAuthorization::registerPermission([
-            'view' => __('filament-authorization::labels.view'),
-            'update' => __('filament-authorization::labels.update'),
-            'create' => __('filament-authorization::labels.create'),
-            'delete' => __('filament-authorization::labels.delete'),
-        ], 'roles', __('filament-authorization::labels.roles'));
+        /* Hosts that register the roles permission themselves — to place it in
+           their own tab, or with their own labels — turn this off so it is not
+           registered twice under the default tab. */
+        if (config('filament-authorization.roles_permission.auto_register', true)) {
+            FilamentAuthorization::registerPermission([
+                'view' => __('filament-authorization::labels.view'),
+                'update' => __('filament-authorization::labels.update'),
+                'create' => __('filament-authorization::labels.create'),
+                'delete' => __('filament-authorization::labels.delete'),
+            ], 'roles', __('filament-authorization::labels.roles'));
+        }
 
         Gate::policy(Role::class, RolePolicy::class);
     }
